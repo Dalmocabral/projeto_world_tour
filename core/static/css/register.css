@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap');
+
+*, body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    height: 100%;
+    background-color: #152733;
+    overflow: hidden;
+}
+
+.form-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    padding: 20px; /* Adicionado para telas menores */
+}
+
+.form-holder .form-content {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Alterado para suportar layout vertical */
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    width: 100%; /* Para ajuste em telas pequenas */
+    max-width: 600px; /* Limite de largura */
+}
+
+.form-content .form-items {
+    border: 3px solid #fff;
+    padding: 30px;
+    width: 100%;
+    border-radius: 10px;
+    text-align: left;
+    transition: all 0.4s ease;
+}
+
+.form-content input[type=text],
+.form-content input[type=password],
+.form-content input[type=email],
+.form-content select {
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    outline: 0;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+    color: #8D8D8D;
+    margin-top: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-content input::placeholder {
+    color: #aaa; /* Para maior acessibilidade */
+}
+
+.form-check-label {
+    font-size: 14px; /* Reduzido para melhor ajuste */
+}
+
+.btn-primary {
+    background-color: #6C757D;
+    outline: none;
+    border: 0;
+    box-shadow: none;
+    padding: 10px 20px; /* Para melhor visual em telas menores */
+    width: 100%; /* Botão ocupa 100% da largura */
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #495056;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .form-content .form-items {
+        padding: 20px; /* Menor espaçamento em telas pequenas */
+    }
+
+    .form-content input[type=text],
+    .form-content input[type=password],
+    .form-content input[type=email] {
+        font-size: 14px; /* Texto menor */
+        padding: 8px; /* Reduzir o espaçamento interno */
+    }
+
+    .form-check-label {
+        font-size: 12px; /* Texto menor para checkbox */
+    }
+
+    .btn-primary {
+        font-size: 16px; /* Ajustar tamanho da fonte */
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-content .form-items {
+        padding: 15px;
+        border-width: 2px; /* Menos espessura na borda */
+    }
+
+    .form-content input[type=text],
+    .form-content input[type=password],
+    .form-content input[type=email] {
+        font-size: 13px; /* Texto ainda menor */
+        padding: 6px; /* Espaçamento mais compacto */
+    }
+
+    .btn-primary {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .form-check-label {
+        font-size: 11px;
+    }
+}
