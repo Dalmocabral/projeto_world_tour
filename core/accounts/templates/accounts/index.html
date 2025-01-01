@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="hero">
+    <video autoplay loop muted plays-inline class="back-video" >
+        <source src="{% static 'assets/video/video.mp4' %}" type="video/mp4">
+    </video>
+    <nav class="nav">
+        <i class="fa-regular fa-paper-plane fa-2x logo" style="color: #9c6c03"></i>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="{% url 'register' %}">Create Account</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+    <div class="content text-center">
+        <h1>Infinite world Tour</h1>
+        <a href="{% url 'login' %}" class="btn-lg mt-3">Explore</a>
+    </div>   
+</div>
+{% endblock %}
