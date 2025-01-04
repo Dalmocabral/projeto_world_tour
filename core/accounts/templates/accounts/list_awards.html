@@ -1,0 +1,63 @@
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Main Content Start -->
+<main class="mt-5 pt-3">
+    <div class="container-fluid">
+      
+      <br>
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="card-table">
+            <div class="card-header">
+                Awards
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="example" class="table data-table table-hover" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>#</th>
+                          <th>Award Title</th>
+                          <th>Type</th>
+                          <th>StarTed</th>
+                          <th>Closed</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for listAwards in list_awards %}
+                      <tr>
+                          <td><img src="{{ listAwards.link_image }}" alt="" style="width: 100px;"></td>
+                          <td>{{ listAwards.name }}</td>
+                          <td>{{ listAwards.type }}</td>
+                          <td>{{ listAwards.date_create |date:"d/m/y" }}</td>
+                          <td></td>
+                          <td></td>
+                          <td><i class="fa-solid fa-infinity"></i></td>
+                      </tr>
+                    {% endfor %}  
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Award Title</th>
+                        <th>Type</th>
+                        <th>StarTed</th>
+                        <th>Closed</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                  </tfoot>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </main>
+{% endblock %}
