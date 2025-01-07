@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Award
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
+from django.shortcuts import render, get_object_or_404
 # Create your views here.
 
 
@@ -57,6 +58,17 @@ def list_awards(request):
     }
 
     return render(request, 'accounts/list_awards.html', context)
+
+def award_detail(request, award_id):
+    # Obtém o objeto Award pelo ID ou retorna 404 se não existir
+    award = get_object_or_404(Award, id=award_id)
+    flight_legs = award.flight_legs.all()  # Lista de Flight Legs associados ao prêmio
+
+    context = {
+        'award': award,
+        'flight_legs': flight_legs,  # Inclua os Flight Legs no contexto
+    }
+    return render(request, 'accounts/award_detail.html', context)
 
 
 def my_awards(request):

@@ -91,7 +91,8 @@ class Award(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     type = models.CharField(max_length=5, choices=CHOICE_TYPE, default='Tour')  # Referência às escolhas
-    date_create = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name

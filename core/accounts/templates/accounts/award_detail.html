@@ -1,0 +1,172 @@
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <br>
+    <br>
+    <!-- Nav Tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
+                type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button"
+                role="tab" aria-controls="overview" aria-selected="false">Leg Overview</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="status-tab" data-bs-toggle="tab" data-bs-target="#status" type="button"
+                role="tab" aria-controls="status" aria-selected="false">Tour Status</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pirep-tab" data-bs-toggle="tab" data-bs-target="#pirep" type="button"
+                role="tab" aria-controls="pirep" aria-selected="false">PIREP</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="help-tab" data-bs-toggle="tab" data-bs-target="#help" type="button" role="tab"
+                aria-controls="help" aria-selected="false">Help</button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content mt-3" id="myTabContent">
+        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+
+            <h2 style="text-align: center; margin-top: 50px;">Tour Description for « {{ award.name }} »</h2>
+            <div class="row mt-3">
+                <!-- Card para a imagem do World Tour -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="{{ award.link_image }}" class="card-img-top" alt="World Tour Image">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">World Tour Image</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card para a descrição do World Tour -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Description</h5>
+                            <p>{{ award.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+            <!-- Lista de Flight Legs -->
+            <h2 style="text-align: center; margin-top: 50px; color: rgb(11, 67, 221);">Flight Legs « {{ award.name }} »</h2>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        
+                        <div class="card-body">
+                            {% if flight_legs %}
+                            <table class="table  table-striped">
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th>#</th>
+                                        <th>Departure</th>
+                                        <th>Destination</th>
+                                        <th>Distance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for leg in flight_legs %}
+                                    <tr style="text-align: center;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td class="namefrom" data-code="{{ leg.from_airport }}">{{ leg.from_airport }}
+                                        </td>
+                                        <td class="nameto" data-code="{{ leg.to_airport }}">{{ leg.to_airport }} </td>
+                                        <td class="distance" data-from="{{ leg.from_airport }}"
+                                            data-to="{{ leg.to_airport }}">Calculating...</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p>No flight legs are available for this tour.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="status" role="tabpanel" aria-labelledby="status-tab">
+            <h3>Tour Status</h3>
+            <p>Current status of the tour.</p>
+        </div>
+        <div class="tab-pane fade" id="pirep" role="tabpanel" aria-labelledby="pirep-tab">
+            <h3>PIREP</h3>
+            <p>Pilot Reports related to the tour.</p>
+        </div>
+        <div class="tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab">
+            <h3>Help</h3>
+            <p>Help and support for the tour.</p>
+        </div>
+    </div>
+</div>
+<script>
+    // Função para calcular a distância entre duas coordenadas
+    function haversineDistance(coords1, coords2) {
+        function toRad(x) {
+            return x * Math.PI / 180;
+        }
+
+        const [lat1, lon1] = coords1;
+        const [lat2, lon2] = coords2;
+
+        const R = 3440.065; // Raio da Terra em milhas náuticas
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Retorna a distância em milhas náuticas
+    }
+
+    // Função para buscar dados da API e calcular distâncias
+    function calculateDistances() {
+        const url = 'https://raw.githubusercontent.com/mwgg/Airports/master/airports.json';
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Para cada linha da tabela, calcula as distâncias
+                document.querySelectorAll("tr").forEach(row => {
+                    const fromAirportCode = row.querySelector('.namefrom')?.getAttribute('data-code');
+                    const toAirportCode = row.querySelector('.nameto')?.getAttribute('data-code');
+
+                    if (fromAirportCode && toAirportCode) {
+                        const fromAirport = data[fromAirportCode];
+                        const toAirport = data[toAirportCode];
+
+                        if (fromAirport && toAirport) {
+                            const fromCoords = [fromAirport.lat, fromAirport.lon];
+                            const toCoords = [toAirport.lat, toAirport.lon];
+                            const distance = Math.round(haversineDistance(fromCoords, toCoords));
+
+                            // Atualiza a célula de distância na tabela
+                            const distanceCell = row.querySelector('.distance');
+                            if (distanceCell) {
+                                distanceCell.innerHTML = `${distance} NM `;
+                            }
+                        } else {
+                            console.error(`Dados do aeroporto não encontrados: ${fromAirportCode} ou ${toAirportCode}`);
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Erro ao buscar dados da API:', error));
+    }
+
+    // Chama a função ao carregar a página
+    document.addEventListener('DOMContentLoaded', calculateDistances);
+</script>
+
+{% endblock %}

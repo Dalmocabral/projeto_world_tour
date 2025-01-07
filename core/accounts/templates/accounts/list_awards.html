@@ -4,60 +4,67 @@
 {% block content %}
 <!-- Main Content Start -->
 <main class="mt-5 pt-3">
-    <div class="container-fluid">
-      
-      <br>
-      <div class="row mt-2">
-        <div class="col-md-12">
-          <div class="card-table">
-            <div class="card-header">
-                Awards
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="example" class="table data-table table-hover" style="width:100%">
-                  <thead>
-                      <tr>
-                          <th>#</th>
-                          <th>Award Title</th>
-                          <th>Type</th>
-                          <th>StarTed</th>
-                          <th>Closed</th>
-                          <th>Start Date</th>
-                          <th>End Date</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    {% for listAwards in list_awards %}
-                      <tr>
-                          <td><img src="{{ listAwards.link_image }}" alt="" style="width: 100px;"></td>
-                          <td>{{ listAwards.name }}</td>
-                          <td>{{ listAwards.type }}</td>
-                          <td>{{ listAwards.date_create |date:"d/m/y" }}</td>
-                          <td></td>
-                          <td></td>
-                          <td><i class="fa-solid fa-infinity"></i></td>
-                      </tr>
-                    {% endfor %}  
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Award Title</th>
-                        <th>Type</th>
-                        <th>StarTed</th>
-                        <th>Closed</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                    </tr>
-                  </tfoot>
+  <div class="container-fluid">
+
+    <br>
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="card-table">
+          <div class="card-header">
+            Awards
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="example" class="table data-table table-hover" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Award Title</th>
+
+                    <th>Type</th>
+                    <th>StarTed</th>
+                    <th>Closed</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for listAwards in list_awards %}
+                  <tr>
+                    <td><a href="{% url 'award_detail' award_id=listAwards.id %}"><span class="badge rounded-pill bg-primary d-flex align-items-center justify-content-center py-3">Show Leg</span></a></td>
+                    <td><img src="{{ listAwards.link_image }}"
+                          alt="" style="width: 100px;"> {{ listAwards.name }}</td>
+                    
+                    <td>{{ listAwards.type }}</td>
+                    <td><i class="fa-solid fa-check" style="color: green;"></i></td>
+                    <td><!-- Checkin de data finalizada --></td>
+                    <td>{{ listAwards.start_date | date:"d/m/y" }}</td>
+                    {% if listAwards.end_date %}
+                    <td>{{ listAwards.end_date | date:"d/m/y" }}</td>
+                    {% else %}
+                    <td><i class="fa-solid fa-infinity"></i></td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>#</th>
+                    <th>Award Title</th>
+                    <th>Type</th>
+                    <th>StarTed</th>
+                    <th>Closed</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                  </tr>
+                </tfoot>
               </table>
-              </div>
             </div>
           </div>
         </div>
       </div>
-      <br>
     </div>
-  </main>
+    <br>
+  </div>
+</main>
 {% endblock %}

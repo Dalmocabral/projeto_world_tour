@@ -13,5 +13,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('app/dashboard/', views.dashboard, name='dashboard'),
     path('app/list_awards/', views.list_awards, name='list_awards'),
+    path('app/award_detail/<int:award_id>/', views.award_detail, name='award_detail'),  # Página de detalhes
     path('app/my_awards/', views.my_awards, name='my_awards')
 ]
