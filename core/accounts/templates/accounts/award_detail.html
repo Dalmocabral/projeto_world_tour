@@ -95,10 +95,47 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="status" role="tabpanel" aria-labelledby="status-tab">
-            <h3>Tour Status</h3>
-            <p>Current status of the tour.</p>
+        <div class="tab-pane fade show active" id="status" role="tabpanel" aria-labelledby="status-tab">
+            <h3>Status do Prêmio</h3>
+            {% if user_award %}
+                <p>Progresso: {{ user_award.progress }}%</p>
+                <p>Início: {{ user_award.start_date|date:'d/m/Y' }}</p>
+                {% if user_award.end_date %}
+                    <p>Concluído em: {{ user_award.end_date|date:'d/m/Y' }}</p>
+                {% else %}
+                    <p>Não concluído.</p>
+                {% endif %}
+            {% else %}
+                <p>Você ainda não iniciou este prêmio.</p>
+            {% endif %}
+        
+            <h4>Pernas de Voo</h4>
+            <table class="table text-center table-hover">
+                <thead>
+                    <tr>
+                        <th>Origem</th>
+                        <th>Destino</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leg in flight_legs %}
+                        <tr class="{% if leg.is_completed %}table-success{% else %}table-danger{% endif %}">
+                            <td>{{ leg.from_airport }}</td>
+                            <td>{{ leg.to_airport }}</td>
+                            <td>
+                                {% if leg.is_completed %}
+                                    <i class="fa-solid fa-check text-success"></i> Concluído
+                                {% else %}
+                                    <i class="fa-regular fa-square text-danger"></i> Pendente
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        
         <div class="tab-pane fade" id="pirep" role="tabpanel" aria-labelledby="pirep-tab">
             <h3>PIREP</h3>
             <p>Pilot Reports related to the tour.</p>

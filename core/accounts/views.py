@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from accounts.forms import RegisterForm
 from django.contrib import messages
-from .models import Award
+from .models import Award, UserAward, PirepsFlight
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -45,11 +46,11 @@ def register(request):
 
     return render(request, 'accounts/register.html', {'form': form})
 
-
+@login_required(login_url='login')
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')
 
-
+@login_required(login_url='login')
 def list_awards(request):
     list_awards = Award.objects.all()
 
@@ -59,17 +60,38 @@ def list_awards(request):
 
     return render(request, 'accounts/list_awards.html', context)
 
-def award_detail(request, award_id):
-    # Obtém o objeto Award pelo ID ou retorna 404 se não existir
-    award = get_object_or_404(Award, id=award_id)
-    flight_legs = award.flight_legs.all()  # Lista de Flight Legs associados ao prêmio
 
+
+@login_required(login_url='login')
+def award_detail(request, award_id):
+    # Obtém o objeto Award pelo ID
+    award = get_object_or_404(Award, id=award_id)
+    user = request.user
+
+    # Obtém UserAward relacionado ao usuário e ao prêmio
+    user_award = UserAward.objects.filter(user=user, award=award).first()
+    flights = PirepsFlight.objects.filter(pilot=user, status='Aprovado')
+
+    # Calcula o progresso do prêmio
+    flight_legs = award.flight_legs.all()
+    for flight_leg in flight_legs:
+        flight_leg.is_completed = False
+        for flight in flights:
+            # Verifica se o voo corresponde à perna
+            if flight.departure_airport == flight_leg.from_airport and flight.arrival_airport == flight_leg.to_airport:
+                flight_leg.is_completed = True
+                break
+
+    # Prepara o contexto
     context = {
         'award': award,
-        'flight_legs': flight_legs,  # Inclua os Flight Legs no contexto
+        'user_award': user_award,
+        'flight_legs': flight_legs,
     }
+
     return render(request, 'accounts/award_detail.html', context)
 
 
+@login_required(login_url='login')
 def my_awards(request):
     return render(request, 'accounts/my_awards.html')

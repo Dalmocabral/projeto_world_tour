@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Award, FlightLeg, AllowedAircraft, UserAward, AllowedIcao
+from .models import User, Award, FlightLeg, AllowedAircraft, UserAward, AllowedIcao, PirepsFlight
 # Register your models here.
 
 
@@ -38,6 +38,6 @@ class PilotAwardAdmin(admin.ModelAdmin):
     '''
 # Registro dos outros modelos
 admin.site.register(User)
-
+admin.site.register(PirepsFlight, PirepsFlightAdmin)
 
 

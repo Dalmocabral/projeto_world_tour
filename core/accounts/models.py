@@ -206,3 +206,33 @@ class UserAward(models.Model):
         
         def __str__(self):
             return self.name
+        
+
+
+class PirepsFlight (models.Model):
+    STATUS_CHOICES = [
+        ('Em análise', 'Em análise'),
+        ('Aprovado', 'Aprovado'),
+        ('Reprovado', 'Reprovado'),
+    ]
+    STATUS_EVENTOS = [
+        ('N', 'Não'),
+        ('S', 'Sim'),
+    ]
+
+
+    aircraft_choices = CHOICE_AIRCRAFT
+    flight_icao =  models.CharField(max_length=10, null=True)
+    flight_number = models.CharField(max_length=10)
+    departure_airport = models.CharField(max_length=50)
+    arrival_airport = models.CharField(max_length=50)    
+    aircraft = models.CharField(choices=aircraft_choices, default=aircraft_choices[0][0], max_length=50)
+    pilot = models.ForeignKey(User, on_delete=models.CASCADE)
+    flight_duration = models.DurationField(null=True, blank=True)     
+    registration_date = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Em análise')
+    # Outros campos relevantes sobre o voo
+
+    def __str__(self):
+        return f"{self.flight_number} - {self.pilot.first_name}"
+    
